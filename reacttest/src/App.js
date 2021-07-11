@@ -1,5 +1,5 @@
 import React, {
-  // useEffect,
+  useEffect,
   useState,
 } from 'react';
 import ProgressBar from './components/progressBar/ProgressBar';
@@ -29,6 +29,21 @@ const App = () => {
     setIndex(index);
     setChecked(check);
   }
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(response => response.json())
+      .then(json => {
+        json.map((v, i) => {
+          fetch(`https://jsonplaceholder.typicode.com/comments?postId=${v.id}`)
+            .then(response => response.json())
+            .then(res => {
+              json[i].comments = res;
+            });
+        })
+        console.log(json);
+      });
+  })
 
   return (
     <div className="container">
